@@ -1,4 +1,6 @@
-import random
+from assets import hangman_art
+from random import choice
+from pathlib import Path
 
 board = []
 word_list = []
@@ -6,10 +8,10 @@ wrong_words = []
 wrong_letters = []
 guesses_remaining = 6
 
-for word in open('words.txt', 'r'):
+for word in open(Path(__file__).parent / 'words.txt', 'r'):
   word_list.append(word.rstrip())
 
-word = random.choice(word_list).upper()
+word = choice(word_list).upper()
 
 for i in word:
   board += '_'
@@ -21,6 +23,7 @@ def display_status():
   if wrong_letters:
     print('Incorrect letters: ' + ', '.join(wrong_letters) + '\n')
   print('Guesses remaining: ' + str(guesses_remaining) + '\n')
+  print(hangman_art[6 - guesses_remaining] + '\n' * 2)
   print(f'Word ({len(word)} letters): ', ' '.join(board) + '\n'*3)
 
 display_status()
