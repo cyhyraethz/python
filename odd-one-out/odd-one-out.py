@@ -86,17 +86,22 @@ while play_again:
       print(''.join(l))
     print('\n' + ' '*14 + '(1)' + ' '*26 + '(2)' + ' '*26 + '(3)' + ' '*26 + '(4)')
     try:
-      guess = int(input('\nYour guess: '))
+      guess = input('\nYour guess: ')
+      if guess == 'exit' or guess == 'quit':
+        play_again = False
+        break
+      guess = int(guess)
     except:
-      pass
+      guess = 0
     finally:
       count += 1
 
-  if icons[guess - 1].unique:
-    result = 'win'
-  else:
-    result = 'lose'
-  replay = input(f'You {result}! Play again? (Y/n): ').lower()
-  if len(replay) > 0:
-    if replay[0] == 'n' or replay[0] == 'q' or replay == 'exit':
-      play_again = False
+  if type(guess) == int:
+    if icons[guess - 1].unique:
+      result = 'win'
+    else:
+      result = 'lose'
+    replay = input(f'You {result}! Play again? (Y/n): ').lower()
+    if len(replay) > 0:
+      if replay[0] == 'n' or replay[0] == 'q' or replay == 'exit':
+        play_again = False
