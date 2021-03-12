@@ -71,9 +71,25 @@ for i in range(len(icons)):
   icons[i] = Icon(shape, filled, circled, unique)
   length -= 1
 
-lines = [icons[i].icon.splitlines() for i in range(4)]
-for l in zip(*lines):
-  print(''.join(l))
 
-# for icon in icons:
-#   print(icon)
+guess = 0
+count = 0
+
+while guess < 1 or guess > 4:
+  if count > 0:
+    print('Error: please enter a valid number between 1 and 4')
+  lines = [icons[i].icon.splitlines() for i in range(4)]
+  for l in zip(*lines):
+    print(''.join(l))
+  print('\n' + ' '*14 + '(1)' + ' '*26 + '(2)' + ' '*26 + '(3)' + ' '*26 + '(4)')
+  try:
+    guess = int(input('\nYour guess: '))
+  except:
+    pass
+  finally:
+    count += 1
+
+if icons[guess - 1].unique:
+  print('You win!')
+else:
+  print('You lose!')
