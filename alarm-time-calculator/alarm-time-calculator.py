@@ -1,4 +1,5 @@
 import datetime
+import os
 
 try:
   wake_hour = int(input('Hour of your next alarm: '))
@@ -6,7 +7,8 @@ try:
 except:
   raise TypeError('Only integers are allowed')
 
-wake_up = open("~/Documents/set-alarm.txt","w+")
+filepath = os.path.join(os.path.expanduser('~') + '/Documents', 'set-alarm.txt')
+wake_up = open(filepath, "w+")
 
 start_day = datetime.date.today()
 alarm_time = wake_hour * 60 + wake_minute
