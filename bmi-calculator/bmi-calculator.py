@@ -1,16 +1,14 @@
 height, weight = 0, 0
 
-while not height:
-  try:
-    height = float(input('Height (centimeters): '))
-  except:
-    print('Error. Invalid height.')
+try:
+  height = float(input('Height (centimeters): '))
+except:
+  raise TypeError('Error. Invalid height.')
 
-while not weight:
-  try:
-    weight = float(input('Weight (kilograms): '))
-  except:
-    print('Error. Invalid weight.')
+try:
+  weight = float(input('Weight (kilograms): '))
+except:
+  raise TypeError('Error. Invalid weight.')
 
 bmi = round(weight / height / height * 10000, 1)
 
