@@ -2,42 +2,45 @@ import datetime
 import os
 import re
 
-filepath = os.path.join(os.path.expanduser('~') + '/Documents', 'set-alarm.txt')
+try:
+  next_alarm = input('time of next alarm (hh:mm): ').split(':')
+  next_alarm_hour,next_alarm_minute = [int(i) for i in next_alarm]
+  wake_goal = input('eventual wake time goal (hh:mm): ').split(':')
+  wake_goal_hour,wake_goal_minute = [int(i) for i in wake_goal]
+  daily_increment = int(input('minutes to wake up earlier by each day: '))
+except:
+  raise TypeError('only integers are allowed')
 
-keep_going = True
+start_day = datetime.date.today()
+wake_goal = wake_goal_hour * 60 + wake_goal_minute
+next_alarm = next_alarm_hour * 60 + next_alarm_minute + daily_increment
+elapsed_days = 1
+wake_times = ''
 
-if os.path.exists(filepath):
-  overwrite = input('File already exists. Overwrite? (y/N): ')
-  if re.match(r"^y.*", overwrite, re.IGNORECASE) == None:
-    print('Exiting program...')
-    keep_going = False
+while next_alarm > wake_goal:
+  next_alarm -= daily_increment
+  hours = str(next_alarm // 60)
+  minutes = str(next_alarm % 60)
+  if len(minutes) < 2:
+    minutes += '0'
+  today = str((start_day + datetime.timedelta(days=elapsed_days)).strftime('%m-%d-%y'))
+  wake_times += f'({today}) {hours}:{minutes}\n'
+  elapsed_days += 1
 
-if keep_going:
-  try:
-    wake_hour = int(input('Hour of your next alarm: '))
-    wake_minute = int(input('Minute of your next alarm: '))
+print(wake_times)
 
-  except:
-    raise TypeError('Only integers are allowed')
+write_file = False
+file_name = 'set-alarm.txt'
 
-  wake_up = open(filepath, "w+")
+if os.path.isfile(file_name):
+  write_file = input('set-alarm.txt already exists, overwrite? (y/N): ')
+else:
+  write_file = input('write output to text file (set-alarm.txt)? (y/N): ')
 
-  start_day = datetime.date.today()
-  alarm_time = wake_hour * 60 + wake_minute
-  elapsed_days = 0
-  wake_times = ''
+if re.match(r'^ye?s?$', write_file, re.IGNORECASE) == None:
+  write_file = False
 
-  while alarm_time > 5 * 60:
-    alarm_time -= 10
-    hours = str(alarm_time // 60)
-    minutes = str(alarm_time % 60)
-    if len(minutes) < 2:
-      minutes += '0'
-    today = str((start_day + datetime.timedelta(days=elapsed_days)).strftime('%m-%d-%y'))
-    wake_times += f'({today}) {hours}:{minutes}\n'
-    elapsed_days += 1
-
-    print(wake_times)
-
-    wake_up.write(wake_times)
-    wake_up.close()
+if write_file:
+  wake_up = open(file_name, "w+")
+  wake_up.write(wake_times)
+  wake_up.close()
