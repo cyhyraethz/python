@@ -1,12 +1,22 @@
 import datetime
 import os
+import re
 
 filepath = os.path.join(os.path.expanduser('~') + '/Documents', 'set-alarm.txt')
 
-if not os.path.exists(filepath):
+keep_going = True
+
+if os.path.exists(filepath):
+  overwrite = input('File already exists. Overwrite? (y/N): ')
+  if re.match(r"^y.*", overwrite, re.IGNORECASE) == None:
+    print('Exiting program...')
+    keep_going = False
+
+if keep_going:
   try:
     wake_hour = int(input('Hour of your next alarm: '))
     wake_minute = int(input('Minute of your next alarm: '))
+
   except:
     raise TypeError('Only integers are allowed')
 
@@ -27,7 +37,7 @@ if not os.path.exists(filepath):
     wake_times += f'({today}) {hours}:{minutes}\n'
     elapsed_days += 1
 
-  print(wake_times)
+    print(wake_times)
 
-  wake_up.write(wake_times)
-  wake_up.close()
+    wake_up.write(wake_times)
+    wake_up.close()
